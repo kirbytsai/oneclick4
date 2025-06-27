@@ -1,10 +1,12 @@
+# app/domains/user/services.py - 修正版
+
 from typing import Optional, List
 from datetime import datetime
 from beanie import PydanticObjectId
 from .models import User
 from .schemas import UserCreate, UserUpdate
-from app.core.security import get_password_hash
-
+from app.core.security import get_password_hash, verify_password
+from app.shared.models.enums import UserRole
 
 class UserService:
     
@@ -12,28 +14,42 @@ class UserService:
     async def create_user(user_data: UserCreate) -> User:
         """建立新用戶"""
         # 檢查 email 是否已存在
-        existing_user = await User.find_one(User.email == user_data.email)
+        existing_user = await User.find_one({"email": user_data.email})
         if existing_user:
-            raise ValueError("Email 已被註冊")
+            raise ValueError("Email 已存在")
         
         # 檢查 username 是否已存在
-        existing_username = await User.find_one(User.username == user_data.username)
+        existing_username = await User.find_one({"username": user_data.username})
         if existing_username:
-            raise ValueError("用戶名稱已被使用")
+            raise ValueError("用戶名已存在")
         
-        # 建立用戶
-        user = User(
-            email=user_data.email,
-            username=user_data.username,
-            hashed_password=get_password_hash(user_data.password),
-            role=user_data.role,
-            company_name=user_data.company_name,
-            contact_person=user_data.contact_person,
-            phone=user_data.phone,
-            description=user_data.description
-        )
+        # 加密密碼
+        hashed_password = get_password_hash(user_data.password)
         
+        # 準備用戶資料
+        user_dict = user_data.dict()
+        user_dict["hashed_password"] = hashed_password
+        del user_dict["password"]
+        
+        user = User(**user_dict)
         return await user.insert()
+    
+    @staticmethod
+    async def get_user_by_email(email: str) -> Optional[User]:
+        """通過 email 獲取用戶"""
+        try:
+            return await User.find_one({"email": email})
+        except Exception as e:
+            print(f"❌ 查詢用戶失敗: {e}")
+            # 如果 Beanie 沒有初始化，嘗試重新初始化
+            from app.core.database import init_db
+            await init_db()
+            return await User.find_one({"email": email})
+    
+    @staticmethod
+    async def get_user_by_username(username: str) -> Optional[User]:
+        """通過 username 獲取用戶"""
+        return await User.find_one({"username": username})
     
     @staticmethod
     async def get_user_by_id(user_id: str) -> Optional[User]:
@@ -44,27 +60,12 @@ class UserService:
             return None
     
     @staticmethod
-    async def get_user_by_email(email: str) -> Optional[User]:
-        """通過 email 獲取用戶"""
-        return await User.find_one(User.email == email)
-    
-    @staticmethod
     async def update_user(user_id: str, user_data: UserUpdate) -> Optional[User]:
         """更新用戶資料"""
         user = await UserService.get_user_by_id(user_id)
         if not user:
             return None
         
-        # 檢查 username 是否已被其他用戶使用
-        if user_data.username and user_data.username != user.username:
-            existing_username = await User.find_one(
-                User.username == user_data.username,
-                User.id != user.id
-            )
-            if existing_username:
-                raise ValueError("用戶名稱已被使用")
-        
-        # 更新資料
         update_data = user_data.dict(exclude_unset=True)
         update_data["updated_at"] = datetime.utcnow()
         
@@ -72,16 +73,26 @@ class UserService:
         return await UserService.get_user_by_id(user_id)
     
     @staticmethod
-    async def get_users_by_role(role: str) -> List[User]:
-        """獲取指定角色的用戶列表"""
-        return await User.find(User.role == role, User.is_active == True).to_list()
-    
-    @staticmethod
-    async def deactivate_user(user_id: str) -> bool:
+    async def deactivate_user(user_id: str) -> Optional[User]:
         """停用用戶"""
         user = await UserService.get_user_by_id(user_id)
         if not user:
-            return False
+            return None
         
         await user.update({"$set": {"is_active": False, "updated_at": datetime.utcnow()}})
-        return True
+        return await UserService.get_user_by_id(user_id)
+    
+    @staticmethod
+    async def get_users_by_role(role: UserRole) -> List[User]:
+        """根據角色獲取用戶列表"""
+        return await User.find({"role": role, "is_active": True}).to_list()
+    
+    @staticmethod
+    async def get_all_users() -> List[User]:
+        """獲取所有用戶 (管理員用)"""
+        return await User.find().to_list()
+    
+    @staticmethod
+    async def verify_user_password(user: User, password: str) -> bool:
+        """驗證用戶密碼"""
+        return verify_password(password, user.hashed_password)

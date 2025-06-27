@@ -137,20 +137,6 @@ class ProposalService:
         return await Proposal.find({"status": status}).sort(-Proposal.created_at).to_list()
     
     @staticmethod
-    async def delete_proposal(proposal_id: str) -> bool:
-        """刪除提案 (只能刪除草稿或被拒絕的提案)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return False
-        
-        # 只能刪除草稿或被拒絕的提案
-        if proposal.status not in [ProposalStatus.DRAFT, ProposalStatus.REJECTED]:
-            raise ValueError("只能刪除草稿或被拒絕的提案")
-        
-        await proposal.delete()
-        return True
-    
-    @staticmethod
     async def get_all_proposals() -> List[Proposal]:
         """獲取所有提案 (admin 用)"""
         return await Proposal.find().sort(-Proposal.created_at).to_list()

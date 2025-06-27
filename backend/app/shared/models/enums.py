@@ -23,3 +23,10 @@ class CaseStatus(str, Enum):
     INTERESTED = "interested"
     DECLINED = "declined"
     COMPLETED = "completed"
+
+class ProposalStatus(str, Enum):
+    DRAFT = "draft"                  # 草稿 - 可編輯
+    UNDER_REVIEW = "under_review"    # 審核中 - 不可編輯
+    APPROVED = "approved"            # 已核准 - 可生成 case
+    REJECTED = "rejected"            # 已拒絕 - 可退回草稿
+    ARCHIVED = "archived"            # 已歸檔
