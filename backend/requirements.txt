@@ -1,0 +1,26 @@
+# FastAPI 核心
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+
+# 資料庫 - 修正版本相容性
+pymongo==4.6.0
+motor==3.3.2
+beanie==1.23.6
+
+# 認證
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# 環境變數
+python-dotenv==1.0.0
+pydantic-settings==2.1.0
+
+# 測試
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+
+# 開發工具
+black==23.11.0
+isort==5.12.0

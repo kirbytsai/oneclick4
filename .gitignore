@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend specific
+backend/logs/
+backend/.pytest_cache/
+
+# Frontend specific (將來會用到)
+frontend/node_modules/
+frontend/dist/
+frontend/.next/
