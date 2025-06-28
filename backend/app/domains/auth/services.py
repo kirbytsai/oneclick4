@@ -1,156 +1,122 @@
-# app/domains/proposal/services.py
+# app/domains/auth/services.py - 修正版
 
-from typing import Optional, List
-from datetime import datetime
+from typing import Optional
+from datetime import datetime, timedelta
 from beanie import PydanticObjectId
-from .models import Proposal
-from .schemas import ProposalCreate, ProposalUpdate, ProposalReview
-from app.shared.models.enums import ProposalStatus
+from .models import RefreshToken
+from .schemas import LoginRequest, TokenResponse
+from app.domains.user.services import UserService
+from app.core.security import verify_password, create_access_token, create_refresh_token
 
-class ProposalService:
+class AuthService:
     
     @staticmethod
-    async def create_proposal(data: ProposalCreate, seller_id: str) -> Proposal:
-        """建立新提案 (草稿狀態)"""
-        proposal = Proposal(
-            **data.dict(),
-            seller_id=seller_id,
-            status=ProposalStatus.DRAFT
+    async def authenticate_user(login_data: LoginRequest) -> Optional:
+        """驗證用戶"""
+        user = await UserService.get_user_by_email(login_data.email)
+        if not user:
+            return None
+        
+        if not UserService.verify_user_password(user, login_data.password):
+            return None
+        
+        return user
+    
+    @staticmethod
+    async def login(login_data: LoginRequest) -> TokenResponse:
+        """用戶登入"""
+        # 驗證用戶
+        user = await AuthService.authenticate_user(login_data)
+        if not user:
+            raise ValueError("Email 或密碼錯誤")
+        
+        if not user.is_active:
+            raise ValueError("帳號已被停用")
+        
+        # 建立 tokens
+        user_data = {"sub": str(user.id), "email": user.email, "role": user.role}
+        
+        access_token = create_access_token(data=user_data)
+        refresh_token_str = create_refresh_token(data=user_data)  # 修正：加入 data 參數
+        
+        # 儲存 refresh token
+        refresh_token = RefreshToken(
+            token=refresh_token_str,
+            user_id=str(user.id),
+            expires_at=datetime.utcnow() + timedelta(days=7)
         )
-        return await proposal.insert()
+        await refresh_token.insert()
+        
+        return TokenResponse(
+            access_token=access_token,
+            refresh_token=refresh_token_str
+        )
     
     @staticmethod
-    async def get_proposal_by_id(proposal_id: str) -> Optional[Proposal]:
-        """通過 ID 獲取提案"""
-        try:
-            return await Proposal.get(PydanticObjectId(proposal_id))
-        except:
-            return None
+    async def refresh_token(refresh_token_str: str) -> TokenResponse:
+        """刷新 token"""
+        # 查找 refresh token
+        refresh_token = await RefreshToken.find_one(
+            {"token": refresh_token_str, "is_active": True}
+        )
+        
+        if not refresh_token:
+            raise ValueError("Invalid refresh token")
+        
+        if refresh_token.expires_at < datetime.utcnow():
+            raise ValueError("Refresh token expired")
+        
+        # 獲取用戶
+        user = await UserService.get_user_by_id(refresh_token.user_id)
+        if not user or not user.is_active:
+            raise ValueError("User not found or inactive")
+        
+        # 建立新的 tokens
+        user_data = {"sub": str(user.id), "email": user.email, "role": user.role}
+        
+        new_access_token = create_access_token(data=user_data)
+        new_refresh_token_str = create_refresh_token(data=user_data)  # 修正：加入 data 參數
+        
+        # 停用舊的 refresh token
+        await refresh_token.update({"$set": {"is_active": False}})
+        
+        # 建立新的 refresh token
+        new_refresh_token = RefreshToken(
+            token=new_refresh_token_str,
+            user_id=str(user.id),
+            expires_at=datetime.utcnow() + timedelta(days=7)
+        )
+        await new_refresh_token.insert()
+        
+        return TokenResponse(
+            access_token=new_access_token,
+            refresh_token=new_refresh_token_str
+        )
     
     @staticmethod
-    async def update_proposal(proposal_id: str, data: ProposalUpdate) -> Optional[Proposal]:
-        """更新提案 (只有 draft 狀態可以更新)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return None
+    async def get_current_user(token: str):
+        """根據 token 獲取當前用戶"""
+        from app.core.security import verify_token
+        from app.domains.user.services import UserService
         
-        # 只有草稿狀態可以編輯
-        if proposal.status != ProposalStatus.DRAFT:
-            raise ValueError("只有草稿狀態的提案可以編輯")
-        
-        update_data = data.dict(exclude_unset=True)
-        update_data["updated_at"] = datetime.utcnow()
-        
-        await proposal.update({"$set": update_data})
-        return await ProposalService.get_proposal_by_id(proposal_id)
-    
-    @staticmethod
-    async def submit_for_review(proposal_id: str) -> Optional[Proposal]:
-        """提交審核 (draft → under_review)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return None
-        
-        if proposal.status != ProposalStatus.DRAFT:
-            raise ValueError("只有草稿狀態的提案可以提交審核")
-        
-        update_data = {
-            "status": ProposalStatus.UNDER_REVIEW,
-            "submitted_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
-        
-        await proposal.update({"$set": update_data})
-        return await ProposalService.get_proposal_by_id(proposal_id)
-    
-    @staticmethod
-    async def review_proposal(proposal_id: str, review_data: ProposalReview, reviewer_id: str) -> Optional[Proposal]:
-        """審核提案 (admin 專用)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return None
-        
-        if proposal.status != ProposalStatus.UNDER_REVIEW:
-            raise ValueError("只有審核中的提案可以進行審核")
-        
-        new_status = ProposalStatus.APPROVED if review_data.approved else ProposalStatus.REJECTED
-        
-        update_data = {
-            "status": new_status,
-            "reviewed_at": datetime.utcnow(),
-            "reviewed_by": reviewer_id,
-            "updated_at": datetime.utcnow()
-        }
-        
-        if not review_data.approved and review_data.reject_reason:
-            update_data["reject_reason"] = review_data.reject_reason
-        
-        await proposal.update({"$set": update_data})
-        return await ProposalService.get_proposal_by_id(proposal_id)
-    
-    @staticmethod
-    async def resubmit_proposal(proposal_id: str) -> Optional[Proposal]:
-        """重新提交提案 (rejected → draft)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
+        # 驗證 token
+        user_id = verify_token(token)
+        if not user_id:
             return None
         
-        if proposal.status != ProposalStatus.REJECTED:
-            raise ValueError("只有被拒絕的提案可以重新提交")
-        
-        update_data = {
-            "status": ProposalStatus.DRAFT,
-            "reject_reason": None,
-            "updated_at": datetime.utcnow()
-        }
-        
-        await proposal.update({"$set": update_data})
-        return await ProposalService.get_proposal_by_id(proposal_id)
+        # 獲取用戶
+        user = await UserService.get_user_by_id(user_id)
+        return user
     
     @staticmethod
-    async def archive_proposal(proposal_id: str) -> Optional[Proposal]:
-        """歸檔提案"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return None
+    async def logout(refresh_token_str: str) -> bool:
+        """用戶登出"""
+        refresh_token = await RefreshToken.find_one(
+            {"token": refresh_token_str, "is_active": True}
+        )
         
-        update_data = {
-            "status": ProposalStatus.ARCHIVED,
-            "updated_at": datetime.utcnow()
-        }
+        if refresh_token:
+            await refresh_token.update({"$set": {"is_active": False}})
+            return True
         
-        await proposal.update({"$set": update_data})
-        return await ProposalService.get_proposal_by_id(proposal_id)
-    
-    @staticmethod
-    async def get_seller_proposals(seller_id: str, status: Optional[ProposalStatus] = None) -> List[Proposal]:
-        """獲取提案方的提案列表"""
-        query = {"seller_id": seller_id}
-        if status:
-            query["status"] = status
-        
-        return await Proposal.find(query).sort(-Proposal.created_at).to_list()
-    
-    @staticmethod
-    async def get_proposals_by_status(status: ProposalStatus) -> List[Proposal]:
-        """按狀態獲取提案列表 (admin 用)"""
-        return await Proposal.find({"status": status}).sort(-Proposal.created_at).to_list()
-    
-    @staticmethod
-    async def delete_proposal(proposal_id: str) -> bool:
-        """刪除提案 (只能刪除草稿或被拒絕的提案)"""
-        proposal = await ProposalService.get_proposal_by_id(proposal_id)
-        if not proposal:
-            return False
-        
-        # 只能刪除草稿或被拒絕的提案
-        if proposal.status not in [ProposalStatus.DRAFT, ProposalStatus.REJECTED]:
-            raise ValueError("只能刪除草稿或被拒絕的提案")
-        
-        await proposal.delete()
-        return True
-    
-    @staticmethod
-    async def get_all_proposals() -> List[Proposal]:
-        """獲取所有提案 (admin 用)"""
-        return await Proposal.find().sort(-Proposal.created_at).to_list()
+        return False

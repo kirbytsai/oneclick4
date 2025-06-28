@@ -4,6 +4,8 @@ from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from beanie import init_beanie
 from typing import Optional
 from .config import settings
+from app.domains.case.models import Case, Comment  # 新增
+
 
 class Database:
     client: Optional[AsyncIOMotorClient] = None
@@ -44,7 +46,13 @@ async def init_db():
     try:
         await init_beanie(
             database=db.database,
-            document_models=[User, RefreshToken, Proposal]
+            document_models=[
+                User, 
+                RefreshToken, 
+                Proposal, 
+                Case,      # 新增
+                Comment    # 新增
+            ]
         )
         
         print("✅ 資料庫初始化完成")
