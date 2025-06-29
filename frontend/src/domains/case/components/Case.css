@@ -1,0 +1,723 @@
+/* src/domains/case/components/Case.css */
+
+/* === 案例列表頁面樣式 === */
+.case-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.case-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+.header-left h1 {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--color-primary);
+}
+
+.header-left .subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.header-right {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* === 篩選區域 === */
+.filter-section {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+}
+
+/* === 統計區域 === */
+.stats-section {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stats-card {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  min-width: 120px;
+}
+
+.stats-number {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stats-label {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* === 案例網格 === */
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.case-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.case-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.case-card-content {
+  padding: var(--spacing-sm) 0;
+}
+
+.case-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.case-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.case-info-label {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* === 空狀態 === */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background: white;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-state-content h3 {
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--color-text-primary);
+}
+
+.empty-state-content p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* === 載入和錯誤狀態 === */
+.loading-container {
+  text-align: center;
+  padding: var(--spacing-xl);
+}
+
+.loading-text {
+  color: var(--color-text-secondary);
+  font-size: 16px;
+}
+
+.error-container {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.error-message {
+  color: #c33;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* === 建立案例頁面 === */
+.create-case-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.create-case-header {
+  margin-bottom: var(--spacing-lg);
+}
+
+.create-case-header h1 {
+  margin: 0 0 var(--spacing-xs) 0;
+  color: var(--color-primary);
+}
+
+.create-case-header .subtitle {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.create-case-form {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.form-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.form-row.full-width {
+  flex-direction: column;
+}
+
+.form-field {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+}
+
+/* 下拉選單樣式 */
+.select-field {
+  position: relative;
+}
+
+.select-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right var(--spacing-sm) center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.select-input:disabled {
+  background-color: var(--color-bg-secondary);
+  cursor: not-allowed;
+}
+
+/* === 案例詳情頁面 === */
+.case-detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+
+.case-detail-header {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.case-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-md);
+  gap: var(--spacing-md);
+}
+
+.case-title h1 {
+  margin: 0;
+  color: var(--color-primary);
+  flex: 1;
+}
+
+.case-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.meta-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.meta-value {
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.case-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.case-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.case-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.content-section {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.content-section h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text-primary);
+  font-size: 18px;
+}
+
+.content-text {
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+.locked-content {
+  text-align: center;
+  padding: var(--spacing-xl);
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius-md);
+  border: 2px dashed var(--color-border);
+}
+
+.locked-content-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.actions-section {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.actions-section h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text-primary);
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.status-timeline {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-left: 3px solid var(--color-border);
+  padding-left: var(--spacing-md);
+  margin-left: var(--spacing-sm);
+}
+
+.timeline-item.active {
+  border-left-color: var(--color-primary);
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: var(--border-radius-sm);
+}
+
+.timeline-item.completed {
+  border-left-color: var(--color-success);
+}
+
+/* === 留言系統 === */
+.comments-section {
+  background: white;
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.comments-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comments-list {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.comment-item {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+}
+
+.comment-item.seller {
+  background: rgba(102, 126, 234, 0.05);
+  margin-left: var(--spacing-lg);
+}
+
+.comment-item.buyer {
+  background: rgba(40, 167, 69, 0.05);
+  margin-right: var(--spacing-lg);
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.comment-author {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.comment-time {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.comment-text {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+}
+
+.comment-form {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--spacing-md);
+}
+
+.comment-form textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: var(--spacing-sm);
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.comment-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+/* === 補充樣式 === */
+
+/* 錯誤文本樣式 */
+.error-text {
+  color: var(--color-danger);
+  font-size: 12px;
+  margin-top: var(--spacing-xs);
+}
+
+/* 字符計數樣式 */
+.character-count {
+  text-align: right;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+/* 聯絡資訊樣式 */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius-sm);
+}
+
+.contact-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.contact-name {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+/* 提案預覽樣式 */
+.proposal-preview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.proposal-preview p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-primary);
+}
+
+.proposal-preview strong {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Textarea 樣式統一 */
+.textarea-input {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.textarea-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.textarea-input:disabled {
+  background-color: var(--color-bg-secondary);
+  cursor: not-allowed;
+}
+
+/* === 響應式設計 === */
+@media (max-width: 768px) {
+  .case-list-container,
+  .create-case-container,
+  .case-detail-container {
+    padding: var(--spacing-md);
+  }
+
+  .case-list-header,
+  .case-title {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-right {
+    order: -1;
+    justify-content: flex-start;
+  }
+
+  .case-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+
+  .filter-buttons {
+    justify-content: center;
+  }
+
+  .stats-section {
+    flex-wrap: wrap;
+  }
+
+  .stats-card {
+    flex: 1;
+    min-width: 100px;
+  }
+
+  .case-content {
+    grid-template-columns: 1fr;
+  }
+
+  .case-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .comment-item.seller {
+    margin-left: var(--spacing-sm);
+  }
+
+  .comment-item.buyer {
+    margin-right: var(--spacing-sm);
+  }
+}
+
+/* 額外的響應式調整 */
+@media (max-width: 480px) {
+  .case-list-container,
+  .create-case-container,
+  .case-detail-container {
+    padding: var(--spacing-sm);
+  }
+
+  .case-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .stats-section {
+    flex-direction: column;
+  }
+
+  .filter-buttons {
+    flex-direction: column;
+  }
+
+  .contact-item {
+    padding: var(--spacing-xs);
+  }
+}

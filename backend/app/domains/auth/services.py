@@ -57,7 +57,7 @@ class AuthService:
         """刷新 token"""
         # 查找 refresh token
         refresh_token = await RefreshToken.find_one(
-            {"token": refresh_token_str, "is_active": True}
+            {"token": refresh_token_str, "is_revoked": False}
         )
         
         if not refresh_token:
@@ -78,7 +78,7 @@ class AuthService:
         new_refresh_token_str = create_refresh_token(data=user_data)  # 修正：加入 data 參數
         
         # 停用舊的 refresh token
-        await refresh_token.update({"$set": {"is_active": False}})
+        await refresh_token.update({"$set": {"is_revoked": True}})
         
         # 建立新的 refresh token
         new_refresh_token = RefreshToken(

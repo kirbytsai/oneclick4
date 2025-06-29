@@ -44,7 +44,7 @@ async def login(login_data: LoginRequest):
 @router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(refresh_data: TokenRefreshRequest):
     """刷新 access token"""
-    token_response = await AuthService.refresh_access_token(refresh_data.refresh_token)
+    token_response = await AuthService.refresh_token(refresh_data.refresh_token)
     if not token_response:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

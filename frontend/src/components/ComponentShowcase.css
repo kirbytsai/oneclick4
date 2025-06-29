@@ -1,0 +1,128 @@
+/* src/components/ComponentShowcase.css */
+
+.showcase {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  min-height: 100vh;
+}
+
+.showcase__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.showcase__header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 16px 0;
+}
+
+.showcase__header p {
+  font-size: 1.125rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.showcase__section {
+  margin-bottom: 32px;
+}
+
+.showcase__group {
+  margin-bottom: 24px;
+}
+
+.showcase__group:last-child {
+  margin-bottom: 0;
+}
+
+.showcase__group h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.showcase__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.showcase__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.showcase__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* 代碼展示區域 */
+.showcase__code {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+.showcase__code pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  .showcase {
+    padding: 20px 16px;
+  }
+  
+  .showcase__header h1 {
+    font-size: 2rem;
+  }
+  
+  .showcase__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .showcase__buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .showcase__buttons .button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .showcase__header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .showcase__header p {
+    font-size: 1rem;
+  }
+  
+  .showcase__section {
+    margin-bottom: 24px;
+  }
+}

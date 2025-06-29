@@ -1,0 +1,184 @@
+/* src/shared/ui/Badge/Badge.css */
+
+/* 基礎徽章樣式 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  border-radius: 20px;
+  white-space: nowrap;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1;
+}
+
+/* 尺寸變體 */
+.badge--small {
+  padding: 4px 8px;
+  font-size: 11px;
+  min-height: 20px;
+}
+
+.badge--medium {
+  padding: 6px 12px;
+  font-size: 12px;
+  min-height: 24px;
+}
+
+.badge--large {
+  padding: 8px 16px;
+  font-size: 14px;
+  min-height: 28px;
+}
+
+/* 顏色變體 */
+.badge--default {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
+}
+
+.badge--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.badge--secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.badge--success {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge--danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge--warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.badge--info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.badge--neutral {
+  background-color: #6c757d;
+  color: white;
+}
+
+/* 淺色變體 (用於背景較深的場景) */
+.badge--light-primary {
+  background-color: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.badge--light-success {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+.badge--light-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.badge--light-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #856404;
+  border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.badge--light-info {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+  border: 1px solid rgba(23, 162, 184, 0.2);
+}
+
+/* 點狀徽章 */
+.badge--dot {
+  padding-left: 8px;
+}
+
+.badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+  flex-shrink: 0;
+}
+
+/* 特殊狀態樣式增強 */
+.badge--approved,
+.badge--completed {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.badge--rejected,
+.badge--cancelled {
+  background-color: #dc3545;
+  color: white;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.badge--under-review,
+.badge--in-negotiation {
+  background-color: #ffc107;
+  color: #212529;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.badge--draft {
+  background-color: #6c757d;
+  color: white;
+}
+
+.badge--nda-signed {
+  background: linear-gradient(45deg, #28a745, #20c997);
+  color: white;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* 動畫效果 */
+.badge--animated {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(102, 126, 234, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
+}
+
+/* 響應式設計 */
+@media (max-width: 576px) {
+  .badge--large {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 24px;
+  }
+  
+  .badge--medium {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-height: 20px;
+  }
+}

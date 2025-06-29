@@ -1,0 +1,159 @@
+/* src/shared/ui/Button/Button.css */
+
+/* 基礎按鈕樣式 */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  outline: none;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* 尺寸變體 */
+.button--small {
+  padding: 8px 16px;
+  font-size: 14px;
+  min-height: 32px;
+}
+
+.button--medium {
+  padding: 12px 24px;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+.button--large {
+  padding: 16px 32px;
+  font-size: 18px;
+  min-height: 52px;
+}
+
+/* 主要按鈕 (藍紫漸層) */
+.button--primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.button--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.button--primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* 次要按鈕 (白色背景) */
+.button--secondary {
+  background: white;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.button--secondary:hover:not(:disabled) {
+  background: #f8f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* 危險按鈕 (紅色) */
+.button--danger {
+  background: #dc3545;
+  color: white;
+}
+
+.button--danger:hover:not(:disabled) {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+}
+
+/* 成功按鈕 (綠色) */
+.button--success {
+  background: #28a745;
+  color: white;
+}
+
+.button--success:hover:not(:disabled) {
+  background: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+}
+
+/* 警告按鈕 (黃色) */
+.button--warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.button--warning:hover:not(:disabled) {
+  background: #e0a800;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+/* 幽靈按鈕 (透明背景) */
+.button--ghost {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid transparent;
+}
+
+.button--ghost:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.1);
+  border-color: #667eea;
+}
+
+/* 禁用狀態 */
+.button--disabled,
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 載入狀態 */
+.button--loading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* 載入動畫 */
+.button__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 響應式設計 */
+@media (max-width: 576px) {
+  .button--large {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  
+  .button--medium {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-height: 40px;
+  }
+}

@@ -1,0 +1,162 @@
+/* src/shared/ui/Input/Input.css */
+
+/* 容器樣式 */
+.input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.input-container--disabled {
+  opacity: 0.6;
+}
+
+/* 標籤樣式 */
+.input-label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.input-required {
+  color: #dc3545;
+  margin-left: 2px;
+}
+
+/* 輸入框包裝器 */
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* 圖標樣式 */
+.input-icon {
+  position: absolute;
+  left: 12px;
+  color: #6c757d;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 基礎輸入框樣式 */
+.input-field {
+  width: 100%;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: white;
+  color: #2c3e50;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* 尺寸變體 */
+.input-field--small {
+  padding: 8px 12px;
+  font-size: 14px;
+  min-height: 36px;
+}
+
+.input-field--medium {
+  padding: 12px 16px;
+  font-size: 16px;
+  min-height: 44px;
+}
+
+.input-field--large {
+  padding: 16px 20px;
+  font-size: 18px;
+  min-height: 52px;
+}
+
+/* 帶圖標的輸入框 */
+.input-field--with-icon {
+  padding-left: 44px;
+}
+
+/* 聚焦狀態 */
+.input-field:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 錯誤狀態 */
+.input-field--error {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.input-field--error:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+/* 禁用狀態 */
+.input-field--disabled,
+.input-field:disabled {
+  background-color: #f8f9fa;
+  border-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* 錯誤訊息樣式 */
+.input-error {
+  font-size: 14px;
+  color: #dc3545;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* 佔位符樣式 */
+.input-field::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.input-field:disabled::placeholder {
+  color: #d1d5db;
+}
+
+/* 不同類型的輸入框樣式 */
+.input-field[type="password"] {
+  font-family: text-security-disc, -webkit-text-security, monospace;
+}
+
+.input-field[type="email"] {
+  text-transform: lowercase;
+}
+
+.input-field[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 自動填充樣式 */
+.input-field:-webkit-autofill,
+.input-field:-webkit-autofill:hover,
+.input-field:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px white inset;
+  -webkit-text-fill-color: #2c3e50;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 響應式設計 */
+@media (max-width: 576px) {
+  .input-field--large {
+    padding: 12px 16px;
+    font-size: 16px;
+    min-height: 44px;
+  }
+  
+  .input-field {
+    font-size: 16px; /* 防止 iOS Safari 縮放 */
+  }
+}
